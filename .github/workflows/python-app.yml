@@ -1,4 +1,4 @@
-name: Run EDA Script
+name: Run Notebook
 
 on: [push]
 
@@ -8,15 +8,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: 3.11
+
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
+
+    - name: Install Jupyter + Python kernel
+      run: |
+        pip install notebook ipykernel
+        python -m ipykernel install --user
+
     - name: Run notebook
       run: |
-        pip install nbconvert
-        jupyter nbconvert --to notebook --execute notebooks/_init_.ipynb --output executed_notebook.ipynb   
+        jupyter nbconvert --to notebook --execute notebooks/_init_.ipynb --output executed_notebook.ipynb
+   
     
