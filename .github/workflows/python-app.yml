@@ -4,24 +4,27 @@ on:
   push:
 
 jobs:
-  execute-notebook:
+  run-notebook:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-        pip install notebook ipykernel
-        python -m ipykernel install --name python3 --user
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install notebook ipykernel nbconvert
 
-    - name: Execute notebook
-      run: |
-        jupyter nbconvert --to notebook --execute notebooks/_init_.ipynb --output executed.ipynb
+      - name: Create and Register Kernel
+        run: |
+          python -m ipykernel install --user --name python3
+
+      - name: Execute notebook
+        run: |
+          jupyter nbconvert --to notebook --execute notebooks/_init_.ipynb --output output.ipynb
 
