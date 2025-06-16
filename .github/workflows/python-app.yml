@@ -1,9 +1,10 @@
 name: Run Notebook
 
-on: [push]
+on:
+  push:
 
 jobs:
-  build:
+  execute-notebook:
     runs-on: ubuntu-latest
 
     steps:
@@ -12,17 +13,15 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.11
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-
-    - name: Install Jupyter + Python kernel
-      run: |
         pip install notebook ipykernel
-        python -m ipykernel install --user
+        python -m ipykernel install --name python3 --user
 
-    - name: Run notebook
+    - name: Execute notebook
       run: |
-        jupyter nbconvert --to notebook --execute notebooks/_init_.ipynb --output executed_notebook.ipynb
+        jupyter nbconvert --to notebook --execute notebooks/_init_.ipynb --output executed.ipynb
+
